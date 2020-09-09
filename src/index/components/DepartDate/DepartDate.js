@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { h0 } from '../../../utils/fp'
 import dayjs from 'dayjs'

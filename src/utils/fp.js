@@ -1,4 +1,4 @@
-//获取当前时间，不要时，分，秒
+//获取指定时间的0时刻时间撮
 export function h0(timestamp = Date.now()) {
     const target = new Date(timestamp)
 

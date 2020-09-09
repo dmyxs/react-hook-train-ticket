@@ -42,18 +42,24 @@ const AlphaIndex = memo(function AlphaIndex(props) {
 })
 
 //获取26个字母
-const alphabet = Array.from(new Array(26), (ele, index) => {
+let alphabet = Array.from(new Array(26), (ele, index) => {
     //a从65开始
     return String.fromCharCode(65 + index)
 })
 
+alphabet.splice(alphabet.indexOf('I'), 1)
+alphabet.splice(alphabet.indexOf('O'), 1)
+alphabet.splice(alphabet.indexOf('U'), 1)
+alphabet.splice(alphabet.indexOf('V'), 1)
+
 //城市列表
 const CityList = memo(function CityList(props) {
     const { sections, onSelect, toAlpha } = props
+    const newSections = sections.filter((c) => c.citys)
     return (
         <div className="city-list">
             <div className="city-cate">
-                {sections.map((c) => {
+                {newSections.map((c) => {
                     return (
                         <CitySection
                             key={c.title}
@@ -64,6 +70,8 @@ const CityList = memo(function CityList(props) {
                     )
                 })}
             </div>
+
+            {/* 字母索引 */}
             <div className="city-index">
                 {alphabet.map((alpha) => {
                     return (
@@ -79,7 +87,7 @@ const CityList = memo(function CityList(props) {
     )
 })
 
-// 搜索推荐组件
+// 搜索推荐组件的子项
 const SuggestItem = memo((props) => {
     const { name, onSelect } = props
     return (

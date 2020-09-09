@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react'
-
-import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import './App.css'
 
 import Header from '../common/Header'
 import DepartDate from './components/DepartDate/DepartDate'
 import HighSpeed from './components/HighSpeed/HighSpeed'
 import Journey from './components/joumey/Joumey'
 import Submit from './components/Submit/Submit'
+
 import CitySelector from '../common/CitySelector'
 import DateSelector from '../common/DateSelector'
-
-import './App.css'
+import { h0 } from './../utils/fp'
 
 import {
     exchangeFromTo,
@@ -24,7 +24,6 @@ import {
     setDepartDate,
     toggleHighSpeed,
 } from './store/actions'
-import { h0 } from './../utils/fp'
 
 const App = (props) => {
     const {
@@ -38,13 +37,14 @@ const App = (props) => {
         isDateSelectorVisible,
         highSpeed,
     } = props
+    console.log(props)
 
-    //返回函数
+    //返回
     const onBack = useCallback(() => {
         window.history.back()
     }, [])
 
-    //批量传递
+    //使用bindActionCreators，让actions和dispatch绑定在一起
     const cbs = useMemo(() => {
         return bindActionCreators(
             {
@@ -133,12 +133,7 @@ const App = (props) => {
     )
 }
 
-const mapState = (state) => {
-    return state
-}
-
-const mapDispatch = (dispatch) => {
-    return { dispatch }
-}
-
-export default connect(mapState, mapDispatch)(App)
+export default connect(
+    (state) => state,
+    (dispatch) => ({ dispatch })
+)(App)

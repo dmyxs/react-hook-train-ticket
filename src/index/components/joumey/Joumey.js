@@ -18,6 +18,7 @@ export default function Journey(props) {
                     className="journey-input journey-from"
                 />
             </div>
+            {/* 切换按钮 */}
             <div className="journey-switch" onClick={() => exchangeFromTo()}>
                 <img src={switchImg} width="70" height="40" alt="switch" />
             </div>
