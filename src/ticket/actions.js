@@ -1,153 +1,103 @@
-export const ACTION_SET_FROM = 'SET_FROM'
-export const ACTION_SET_TO = 'SET_TO'
-export const ACTION_SET_IS_CITY_SELECTOR_VISIBLE =
-  'SET_IS_CITY_SELECTOR_VISIBLE'
-export const ACTION_SET_CURRENT_SELECTING_LEFT_CITY =
-  'SET_CURRENT_SELECTING_LEFT_CITY'
-export const ACTION_SET_CITY_DATA = 'SET_CITY_DATA'
-export const ACTION_SET_IS_LOADING_CITY_DATA = 'SET_IS_LOADING_CITY_DATA'
-export const ACTION_SET_IS_DATE_SELECTOR_VISIBLE =
-  'SET_IS_DATE_SELECTOR_VISIBLE'
-export const ACTION_SET_HIGH_SPEED = 'SET_HIGH_SPEED'
-export const ACTION_SET_DEPART_DATE = 'SET_DEPART_DATE'
+import { h0 } from '../utils/fp'
 
-export function setFrom(from) {
-  return {
-    type: ACTION_SET_FROM,
-    payload: from,
-  }
-}
-
-export function setTo(to) {
-  return {
-    type: ACTION_SET_TO,
-    payload: to,
-  }
-}
-
-export function setIsLoadingCityData(isLoadingCityData) {
-  return {
-    type: ACTION_SET_IS_LOADING_CITY_DATA,
-    payload: isLoadingCityData,
-  }
-}
-
-export function setCityData(cityDate) {
-  return {
-    type: ACTION_SET_CITY_DATA,
-    payload: cityDate,
-  }
-}
-
-export function toggleHighSpeed() {
-  return (dispatch, getState) => {
-    const { highSpeed } = getState()
-    dispatch({
-      type: ACTION_SET_HIGH_SPEED,
-      payload: !highSpeed,
-    })
-  }
-}
-
-export function showCitySelector(currentSelectingLeftCity) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
-      payload: true,
-    })
-
-    dispatch({
-      type: ACTION_SET_CURRENT_SELECTING_LEFT_CITY,
-      payload: currentSelectingLeftCity,
-    })
-  }
-}
-
-export function hideCitySelector() {
-  return {
-    type: ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
-    payload: false,
-  }
-}
-
-export function setSelectedCity(city) {
-  return (dispatch, getState) => {
-    const { currentSelectingLeftCity } = getState()
-
-    if (currentSelectingLeftCity) {
-      dispatch(setFrom(city))
-    } else {
-      dispatch(setTo(city))
-    }
-
-    dispatch(hideCitySelector())
-  }
-}
-
-export function showDateSelector() {
-  return {
-    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: true,
-  }
-}
-
-export function hideDateSelector() {
-  return {
-    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: false,
-  }
-}
-
-export function exchangeFromTo() {
-  return (dispatch, getState) => {
-    const { from, to } = getState()
-    dispatch(setFrom(to))
-    dispatch(setTo(from))
-  }
-}
+export const ACTION_SET_DEPARTDATE = 'ACTION_SET_DEPARTDATE'
+export const ACTION_SET_ARRIVEDATE = 'ACTION_SET_ARRIVEDATE'
+export const ACTION_SET_DEPARTTIMESTR = 'ACTION_SET_DEPARTTIMESTR'
+export const ACTION_SET_ARRIVETIMESTR = 'ACTION_SET_ARRIVETIMESTR'
+export const ACTION_SET_DEPARTSTATION = 'ACTION_SET_DEPARTSTATION'
+export const ACTION_SET_ARRIVESTATION = 'ACTION_SET_ARRIVESTATION'
+export const ACTION_SET_TRAINNUMBER = 'ACTION_SET_TRAINNUMBER'
+export const ACTION_SET_DURATIONSSTR = 'ACTION_SET_DURATIONSSTR'
+export const ACTION_SET_TICKETS = 'ACTION_SET_TICKETS'
+export const ACTION_SET_ISSCHEDULEVISIBLE = 'ACTION_SET_ISSCHEDULEVISIBLE'
+export const ACTION_SET_SEARCHPARSED = 'ACTION_SET_SEARCHPARSED'
 
 export function setDepartDate(departDate) {
-  return {
-    type: ACTION_SET_DEPART_DATE,
-    payload: departDate,
-  }
+    return {
+        type: ACTION_SET_DEPARTDATE,
+        payload: departDate,
+    }
+}
+export function setArriveDate(arriveDate) {
+    return {
+        type: ACTION_SET_ARRIVEDATE,
+        payload: arriveDate,
+    }
+}
+export function setDepartTimeStr(departTimeStr) {
+    return {
+        type: ACTION_SET_DEPARTTIMESTR,
+        payload: departTimeStr,
+    }
+}
+export function setArriveTimeStr(arriveTimeStr) {
+    return {
+        type: ACTION_SET_ARRIVETIMESTR,
+        payload: arriveTimeStr,
+    }
+}
+export function setDepartStation(departStation) {
+    return {
+        type: ACTION_SET_DEPARTSTATION,
+        payload: departStation,
+    }
+}
+export function setArriveStation(arriveStation) {
+    return {
+        type: ACTION_SET_ARRIVESTATION,
+        payload: arriveStation,
+    }
+}
+export function setTrainNumber(trainNumber) {
+    return {
+        type: ACTION_SET_TRAINNUMBER,
+        payload: trainNumber,
+    }
+}
+export function setDurationStr(durationsStr) {
+    return {
+        type: ACTION_SET_DURATIONSSTR,
+        payload: durationsStr,
+    }
+}
+export function setTickets(tickets) {
+    return {
+        type: ACTION_SET_TICKETS,
+        payload: tickets,
+    }
+}
+export function setIsScheduleVisible(isScheduleVisible) {
+    return {
+        type: ACTION_SET_ISSCHEDULEVISIBLE,
+        payload: isScheduleVisible,
+    }
 }
 
-export function fetchCityData() {
-  return (dispatch, getState) => {
-    const { isLoadingCityData } = getState()
-
-    if (isLoadingCityData) {
-      return
+export function toggleIsScheduleVisible() {
+    return (dispatch, getState) => {
+        const { isScheduleVisible } = getState()
+        dispatch(setIsScheduleVisible(!isScheduleVisible))
     }
+}
 
-    const cache = JSON.parse(localStorage.getItem('city_data_cache') || '{}')
-
-    if (Date.now() < cache.expires) {
-      dispatch(setCityData(cache.data))
-
-      return
+export function setSearchParsed(searchParsed) {
+    return {
+        type: ACTION_SET_SEARCHPARSED,
+        payload: searchParsed,
     }
+}
 
-    dispatch(setIsLoadingCityData(true))
-
-    fetch('/rest/cities?_' + Date.now())
-      .then((res) => res.json())
-      .then((cityData) => {
-        dispatch(setCityData(cityData))
-
-        localStorage.setItem(
-          'city_data_cache',
-          JSON.stringify({
-            expires: Date.now() + 60 * 1000,
-            data: cityData,
-          })
-        )
-
-        dispatch(setIsLoadingCityData(false))
-      })
-      .catch(() => {
-        dispatch(setIsLoadingCityData(false))
-      })
-  }
+export function nextDate() {
+    return (dispatch, getState) => {
+        const { departDate } = getState()
+        //departDate是当天的0时刻
+        dispatch(setDepartDate(h0(departDate + 86400 * 1000)))
+    }
+}
+export function prevDate() {
+    return (dispatch, getState) => {
+        const { departDate } = getState()
+        //departDate是当天的0时刻
+        dispatch(setDepartDate(h0(departDate - 86400 * 1000)))
+    }
 }

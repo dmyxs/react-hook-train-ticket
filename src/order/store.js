@@ -4,17 +4,22 @@ import reducers from './reducers'
 import thunk from 'redux-thunk'
 
 export default createStore(
-  combineReducers(reducers),
-  {
-    from: '北京',
-    to: '上海',
-    isCitySelectorVisible: false,
-    currentSelectingLeftCity: false,
-    cityData: null,
-    isLoadingCityData: false,
-    isDateSelectorVisible: false,
-    departDate: Date.now(),
-    highSpeed: false,
-  },
-  applyMiddleware(thunk)
+    combineReducers(reducers),
+    {
+        trainNumber: null,
+        departStation: null,
+        arriveStation: null,
+        seatType: null,
+        departDate: Date.now(),
+        arriveDate: Date.now(),
+        departTimeStr: null,
+        arriveTimeStr: null,
+        durationStr: null,
+        price: null,
+        passengers: [],
+        menu: null,
+        isMenuVisible: false,
+        searchParsed: false,
+    },
+    applyMiddleware(thunk)
 )

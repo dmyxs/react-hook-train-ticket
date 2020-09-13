@@ -37,7 +37,7 @@ const App = (props) => {
         isDateSelectorVisible,
         highSpeed,
     } = props
-    console.log(props)
+    // console.log(props)
 
     //返回
     const onBack = useCallback(() => {
@@ -135,5 +135,5 @@ const App = (props) => {
 
 export default connect(
     (state) => state,
-    (dispatch) => ({ dispatch })
+    (dispatch) => ({ dispatch }) //这样可以在props中获取dispatch
 )(App)

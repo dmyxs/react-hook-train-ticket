@@ -1,104 +1,145 @@
 import {
-  ACTION_SET_FROM,
-  ACTION_SET_TO,
-  ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
-  ACTION_SET_CURRENT_SELECTING_LEFT_CITY,
-  ACTION_SET_CITY_DATA,
-  ACTION_SET_IS_LOADING_CITY_DATA,
-  ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-  ACTION_SET_HIGH_SPEED,
-  ACTION_SET_DEPART_DATE,
+    ACTION_SET_TRAINNUMBER,
+    ACTION_SET_DEPARTSTATION,
+    ACTION_SET_ARRIVESTATION,
+    ACTION_SET_SEATTYPE,
+    ACTION_SET_DEPARTDATE,
+    ACTION_SET_ARRIVEDATE,
+    ACTION_SET_DEPARTTIMESTR,
+    ACTION_SET_ARRIVETIMESTR,
+    ACTION_SET_DURATIONSTR,
+    ACTION_SET_PRICE,
+    ACTION_SET_PASSENGERS,
+    ACTION_SET_MENU,
+    ACTION_SET_ISMENUVISIBLE,
+    ACTION_SET_SEARCHPARSED,
 } from './actions'
 
 export default {
-  from(state = '北京', action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_FROM:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  to(state = '上海', action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_TO:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  isCitySelectorVisible(state = false, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_IS_CITY_SELECTOR_VISIBLE:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  currentSelectingLeftCity(state = false, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_CURRENT_SELECTING_LEFT_CITY:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  cityData(state = null, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_CITY_DATA:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  isLoadingCityData(state = false, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_IS_LOADING_CITY_DATA:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  isDateSelectorVisible(state = false, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_IS_DATE_SELECTOR_VISIBLE:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  highSpeed(state = false, action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_HIGH_SPEED:
-        return payload
-      default:
-    }
-
-    return state
-  },
-  departDate(state = Date.now(), action) {
-    const { type, payload } = action
-    switch (type) {
-      case ACTION_SET_DEPART_DATE:
-        return payload
-      default:
-    }
-
-    return state
-  },
+    trainNumber(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_TRAINNUMBER:
+                return payload
+            default:
+        }
+        return state
+    },
+    departStation(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_DEPARTSTATION:
+                return payload
+            default:
+        }
+        return state
+    },
+    arriveStation(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_ARRIVESTATION:
+                return payload
+            default:
+        }
+        return state
+    },
+    seatType(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_SEATTYPE:
+                return payload
+            default:
+        }
+        return state
+    },
+    departDate(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_DEPARTDATE:
+                return payload
+            default:
+        }
+        return state
+    },
+    arriveDate(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_ARRIVEDATE:
+                return payload
+            default:
+        }
+        return state
+    },
+    departTimeStr(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_DEPARTTIMESTR:
+                return payload
+            default:
+        }
+        return state
+    },
+    arriveTimeStr(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_ARRIVETIMESTR:
+                return payload
+            default:
+        }
+        return state
+    },
+    durationStr(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_DURATIONSTR:
+                return payload
+            default:
+        }
+        return state
+    },
+    price(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_PRICE:
+                return payload
+            default:
+        }
+        return state
+    },
+    passengers(state = [], action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_PASSENGERS:
+                return payload
+            default:
+        }
+        return state
+    },
+    menu(state = null, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_MENU:
+                return payload
+            default:
+        }
+        return state
+    },
+    isMenuVisible(state = false, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_ISMENUVISIBLE:
+                return payload
+            default:
+        }
+        return state
+    },
+    searchParsed(state = false, action) {
+        const { type, payload } = action
+        switch (type) {
+            case ACTION_SET_SEARCHPARSED:
+                return payload
+            default:
+        }
+        return state
+    },
 }

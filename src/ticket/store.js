@@ -2,16 +2,21 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 
 import reducers from './reducers'
 import thunk from 'redux-thunk'
-import { h0 } from '../utils/fp'
 
 export default createStore(
     combineReducers(reducers),
     {
-        from: null,
-        to: null,
-        departDate: h0(Date.now()),
-        highSpeed: false,
-        trainList: [],
+        departDate: Date.now(),
+        arriveDate: Date.now(),
+        departTimeStr: null,
+        arriveTimeStr: null,
+        departStation: null,
+        arriveStation: null,
+        trainNumber: null,
+        durationsStr: null,
+        tickets: [],
+        isScheduleVisible: false,
+        searchParsed: false,
     },
     applyMiddleware(thunk)
 )
