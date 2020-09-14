@@ -53,12 +53,13 @@ export default {
     },
     highSpeed(state = false, action) {
         const { type, payload } = action
+        let checkedTrainTypes = payload
         switch (type) {
             case ACTION_SET_HIGHSPEED:
                 return payload
             //数据联动
             case ACTION_SET_CHECKEDTRAINTYPES:
-                const checkedTrainTypes = payload
+                checkedTrainTypes = payload
                 return Boolean(checkedTrainTypes[1] && checkedTrainTypes[5])
             default:
         }
@@ -120,13 +121,18 @@ export default {
     },
     checkedTrainTypes(state = {}, action) {
         const { type, payload } = action
+
+        let highSpeed = payload
+        let newCheckedTrainTypes = { ...state }
+
         switch (type) {
             case ACTION_SET_CHECKEDTRAINTYPES:
                 return payload
             //数据联动：同时监听highSpeed
             case ACTION_SET_HIGHSPEED:
-                const highSpeed = payload
-                const newCheckedTrainTypes = { ...state }
+                highSpeed = payload
+                newCheckedTrainTypes = { ...state }
+
                 if (highSpeed) {
                     newCheckedTrainTypes[1] = true
                     newCheckedTrainTypes[5] = true

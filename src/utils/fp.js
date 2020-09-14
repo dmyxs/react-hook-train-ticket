@@ -1,4 +1,4 @@
-//获取指定时间的0时刻时间撮
+//获取指定时间的0时刻时间撮，不传值，默认是今天
 export function h0(timestamp = Date.now()) {
     const target = new Date(timestamp)
 
@@ -7,6 +7,5 @@ export function h0(timestamp = Date.now()) {
     target.setMinutes(0)
     target.setSeconds(0)
     target.setMilliseconds(0)
-    // console.log(target.getTime())
     return target.getTime()
 }

@@ -7,7 +7,6 @@ import Slider from './Slider'
 const Filter = memo(function Filter(props) {
     const { name, checked, toggle, value } = props
     return (
-        //点击时，把value传递给useState的更新函数
         <li className={classnames({ checked })} onClick={() => toggle(value)}>
             {name}
         </li>
@@ -16,7 +15,6 @@ const Filter = memo(function Filter(props) {
 
 const Option = memo(function Option(props) {
     const { title, options, checkedMap, update } = props
-    // console.log(checkedMap)
 
     //中间函数
     const toggle = useCallback(

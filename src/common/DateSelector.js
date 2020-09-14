@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import './DateSelector.css'
 import classnames from 'classnames'
 import Header from './Header'
 import { h0 } from './../utils/fp'
 
-function Day(props) {
+const Day = memo((props) => {
     const { day, onSelect } = props
 
     //当月的前后如果是为空的日期，显示特殊的td
@@ -30,9 +30,9 @@ function Day(props) {
             {dateString}
         </td>
     )
-}
+})
 
-function Week(props) {
+const Week = memo((props) => {
     const { days, onSelect } = props
     return (
         <tr className="date-table-days">
@@ -41,9 +41,9 @@ function Week(props) {
             })}
         </tr>
     )
-}
+})
 
-function Month(props) {
+const Month = memo((props) => {
     const { startingTimeInMonth, onSelect } = props
     const startDay = new Date(startingTimeInMonth)
     const currentDay = new Date(startingTimeInMonth)
@@ -100,9 +100,9 @@ function Month(props) {
             </tbody>
         </table>
     )
-}
+})
 
-export default function DateSelector(props) {
+const DateSelector = memo((props) => {
     const { show, onSelect, onBack } = props
 
     const now = new Date()
@@ -136,4 +136,6 @@ export default function DateSelector(props) {
             </div>
         </div>
     )
-}
+})
+
+export default DateSelector

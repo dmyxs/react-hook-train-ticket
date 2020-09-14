@@ -44,7 +44,7 @@ export function setCityData(cityDate) {
 }
 
 //切换高铁动车
-//thunk可以获取两个参数
+//异步action：：获取到最新的值，然后根据最新的值取反
 export function toggleHighSpeed() {
     return (dispatch, getState) => {
         const { highSpeed } = getState()
@@ -55,7 +55,9 @@ export function toggleHighSpeed() {
     }
 }
 
-//显示城市选择浮层：接收一个城市作为参数
+//显示城市选择浮层的同时，指定在哪里回填数据
+//打开from的浮层时，传入true，选择城市时，再判断该变量真假回传到设定好的数据中
+//参数currentSelectingLeftCity 如果是true，回填到from，是false 回填到to
 export function showCitySelector(currentSelectingLeftCity) {
     return (dispatch) => {
         dispatch({
@@ -71,6 +73,7 @@ export function showCitySelector(currentSelectingLeftCity) {
         })
     }
 }
+
 //隐藏城市选择浮层
 export function hideCitySelector() {
     return {
@@ -79,7 +82,7 @@ export function hideCitySelector() {
     }
 }
 
-//选择浮层选择城市，然后回填，参数是城市
+//在浮层选择城市，然后回填，参数是城市，通过判断currentSelectingLeftCity
 export function setSelectedCity(city) {
     return (dispatch, getState) => {
         const { currentSelectingLeftCity } = getState()
@@ -90,7 +93,7 @@ export function setSelectedCity(city) {
             dispatch(setTo(city))
         }
 
-        //关闭城市选择浮层
+        //选择城市后，关闭城市选择浮层
         dispatch(hideCitySelector())
     }
 }
@@ -102,6 +105,7 @@ export function showDateSelector() {
         payload: true,
     }
 }
+
 //隐藏日期选择浮层
 export function hideDateSelector() {
     return {
@@ -110,7 +114,7 @@ export function hideDateSelector() {
     }
 }
 
-//切换始发站和重点站，获取值，再分别dispatch
+//切换始发站和终点站，获取值，再分别dispatch
 export function exchangeFromTo() {
     return (dispatch, getState) => {
         const { from, to } = getState()
@@ -141,7 +145,7 @@ export function fetchCityData() {
             localStorage.getItem('city_data_cache') || '{}'
         )
 
-        //判断缓存是否过期
+        //判断缓存是否过期：现在时间的时间挫是否小于设置的时间挫
         if (Date.now() < cache.expires) {
             //没有过期就使用缓存
             dispatch(setCityData(cache.data))
@@ -156,7 +160,6 @@ export function fetchCityData() {
         fetch('/rest/cities?_' + Date.now())
             .then((res) => res.json())
             .then((cityData) => {
-                // console.log(cityData)
                 // 发送请求成功之后，设置城市状态
                 dispatch(setCityData(cityData))
 

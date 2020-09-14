@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import './App.css'
 
 import Header from '../common/Header'
 import DepartDate from './components/DepartDate/DepartDate'
 import HighSpeed from './components/HighSpeed/HighSpeed'
 import Journey from './components/joumey/Joumey'
 import Submit from './components/Submit/Submit'
-
 import CitySelector from '../common/CitySelector'
 import DateSelector from '../common/DateSelector'
+
 import { h0 } from './../utils/fp'
+import './App.css'
 
 import {
     exchangeFromTo,
@@ -44,7 +44,7 @@ const App = (props) => {
         window.history.back()
     }, [])
 
-    //使用bindActionCreators，让actions和dispatch绑定在一起
+    //回调函数使用bindActionCreators，让actions和dispatch绑定在一起
     const cbs = useMemo(() => {
         return bindActionCreators(
             {
@@ -69,7 +69,7 @@ const App = (props) => {
     const departDateCbs = useMemo(() => {
         return bindActionCreators(
             {
-                onClick: showDateSelector,
+                showDate: showDateSelector,
             },
             dispatch
         )

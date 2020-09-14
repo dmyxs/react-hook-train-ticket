@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { memo } from 'react'
 import switchImg from '../../imgs/switch.svg'
 import './Joumey.css'
 
-export default function Journey(props) {
+const Journey = memo((props) => {
     const { from, to, exchangeFromTo, showCitySelector } = props
     return (
         <div className="journey">
@@ -13,14 +13,20 @@ export default function Journey(props) {
                 <input
                     type="text"
                     readOnly
-                    name="from"
+                    name="from" //发送请求依赖
                     value={from}
                     className="journey-input journey-from"
                 />
             </div>
             {/* 切换按钮 */}
             <div className="journey-switch" onClick={() => exchangeFromTo()}>
-                <img src={switchImg} width="70" height="40" alt="switch" />
+                <img
+                    className="journey-switch-reverse"
+                    src={switchImg}
+                    width="70"
+                    height="40"
+                    alt="switch"
+                />
             </div>
             <div
                 className="journey-station"
@@ -36,4 +42,6 @@ export default function Journey(props) {
             </div>
         </div>
     )
-}
+})
+
+export default Journey

@@ -3,8 +3,67 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import './CitySelector.css'
 
+// 搜索推荐组件的子项
+const SuggestItem = memo((props) => {
+    const { name, onSelect } = props
+    return (
+        <li className="city-suggest-li" onClick={() => onSelect(name)}>
+            {name}
+        </li>
+    )
+})
+
+// 搜索推荐组件
+const Suggest = memo((props) => {
+    const { searchKey, onSelect } = props
+    const [result, setResult] = useState([])
+
+    useEffect(() => {
+        fetch('/rest/search?key=' + encodeURIComponent(searchKey))
+            .then((res) => res.json())
+            .then((data) => {
+                const { result, searchKey: sKey } = data
+
+                //因为可能有多个请求在进行，所以两者匹配才设置结果
+                if (sKey === searchKey) {
+                    setResult(result)
+                }
+            })
+    }, [searchKey])
+
+    //如果没有搜索结果，就显示搜索关键词
+    // const fallBackResult = result.length ? result : [{ display: searchKey }]
+    const fallBackResult = useMemo(() => {
+        //如果result为空，0取反=真
+        if (!result.length) {
+            return [
+                {
+                    display: searchKey,
+                },
+            ]
+        }
+        return result
+    }, [result, searchKey])
+
+    return (
+        <div className="city-suggest">
+            <ul className="city-suggest-ul">
+                {fallBackResult.map((c) => {
+                    return (
+                        <SuggestItem
+                            key={c.display}
+                            name={c.display}
+                            onSelect={onSelect}
+                        />
+                    )
+                })}
+            </ul>
+        </div>
+    )
+})
+
 //每个城市的组件
-const CityItem = memo(function CityItem(props) {
+const CityItem = memo((props) => {
     const { name, onSelect } = props
     return (
         <li className="city-li" onClick={() => onSelect(name)}>
@@ -14,7 +73,7 @@ const CityItem = memo(function CityItem(props) {
 })
 
 //以字母为集合的城市组件
-const CitySection = memo(function CitySection(props) {
+const CitySection = memo((props) => {
     const { title, cities = [], onSelect } = props
     return (
         <ul className="city-ul">
@@ -31,8 +90,8 @@ const CitySection = memo(function CitySection(props) {
     )
 })
 
-//字母列表
-const AlphaIndex = memo(function AlphaIndex(props) {
+//字母列表组件
+const AlphaIndex = memo((props) => {
     const { alpha, toAlpha } = props
     return (
         <i className="city-index-item" onClick={() => toAlpha(alpha)}>
@@ -41,9 +100,8 @@ const AlphaIndex = memo(function AlphaIndex(props) {
     )
 })
 
-//获取26个字母
+//获取26个字母：遍历数组，a从65开始
 let alphabet = Array.from(new Array(26), (ele, index) => {
-    //a从65开始
     return String.fromCharCode(65 + index)
 })
 
@@ -53,7 +111,7 @@ alphabet.splice(alphabet.indexOf('U'), 1)
 alphabet.splice(alphabet.indexOf('V'), 1)
 
 //城市列表
-const CityList = memo(function CityList(props) {
+const CityList = memo((props) => {
     const { sections, onSelect, toAlpha } = props
     const newSections = sections.filter((c) => c.citys)
     return (
@@ -87,63 +145,7 @@ const CityList = memo(function CityList(props) {
     )
 })
 
-// 搜索推荐组件的子项
-const SuggestItem = memo((props) => {
-    const { name, onSelect } = props
-    return (
-        <li className="city-suggest-li" onClick={() => onSelect(name)}>
-            {name}
-        </li>
-    )
-})
-
-// 搜索推荐组件
-const Suggest = memo((props) => {
-    const { searchKey, onSelect } = props
-    const [result, setResult] = useState([])
-
-    useEffect(() => {
-        fetch('/rest/search?key=' + encodeURIComponent(searchKey))
-            .then((res) => res.json())
-            .then((data) => {
-                const { result, searchKey: sKey } = data
-                if (sKey === searchKey) {
-                    setResult(result)
-                }
-            })
-    }, [searchKey])
-
-    //如果没有搜索结果，就显示搜索关键词
-    // const fallBackResult = result.length ? result : [{ display: searchKey }]
-    const fallBackResult = useMemo(() => {
-        if (!result.length) {
-            return [
-                {
-                    display: searchKey,
-                },
-            ]
-        }
-        return result
-    }, [result, searchKey])
-
-    return (
-        <div className="city-suggest">
-            <ul className="city-suggest-ul">
-                {fallBackResult.map((c) => {
-                    return (
-                        <SuggestItem
-                            key={c.display}
-                            name={c.display}
-                            onSelect={onSelect}
-                        />
-                    )
-                })}
-            </ul>
-        </div>
-    )
-})
-
-//页面
+//主组件
 const CitySelector = memo(function CitySelector(props) {
     const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props
 
@@ -171,13 +173,12 @@ const CitySelector = memo(function CitySelector(props) {
         document.querySelector(`[data-cate='${alpha}']`).scrollIntoView()
     }, [])
 
-    //中间渲染函数：cityData有可能不存在，所以需要过渡判读
+    //中间渲染函数：因为cityData有可能不存在，所以需要过渡判读
     const outputCitySections = () => {
         if (isLoading) {
             return <div>loading</div>
         }
         if (cityData) {
-            // console.log(cityData)
             return (
                 <CityList
                     sections={cityData.cityList}
@@ -196,7 +197,11 @@ const CitySelector = memo(function CitySelector(props) {
             className={classnames('city-selector', {
                 hidden: !show,
             })}
+            // className={
+            //     show === false ? 'city-selector hidden' : 'city-selector'
+            // }
         >
+            {/* 返回 */}
             <div className="city-search">
                 <div className="search-back" onClick={() => handle()}>
                     <svg width="42" height="42">
@@ -208,6 +213,7 @@ const CitySelector = memo(function CitySelector(props) {
                         />
                     </svg>
                 </div>
+
                 <div className="search-input-wrapper">
                     <input
                         type="text"
@@ -216,6 +222,8 @@ const CitySelector = memo(function CitySelector(props) {
                         placeholder="城市，车站的中文"
                         onChange={(e) => setSearchKey(e.target.value)}
                     />
+
+                    {/* ×号 */}
                     <i
                         className={classnames('search-clean', {
                             // searchKey等于0时加入类名
@@ -233,7 +241,7 @@ const CitySelector = memo(function CitySelector(props) {
             {Boolean(key) && (
                 <Suggest searchKey={key} onSelect={(key) => onSelect(key)} />
             )}
-            {/* 渲染城市组件 */}
+            {/* 渲染城市列表 */}
             {outputCitySections()}
         </div>
     )
