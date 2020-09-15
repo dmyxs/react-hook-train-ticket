@@ -43,7 +43,7 @@
     border: 1px solid #cdcdcd;
 }
 
-.date-table-weeks {
+.date-table .date-table-weeks {
     font-size: 14px;
     height: 23px;
     color: #8c8c8c;
@@ -54,7 +54,8 @@
     border-bottom: 1px solid #cacaca;
 }
 
-.date-table-weeks th {
+
+.date-table th {
     text-align: center;
 }
 

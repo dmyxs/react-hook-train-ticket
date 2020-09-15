@@ -51,6 +51,7 @@ const App = (props) => {
         orderType,
         onlyTickets,
         isFilterVisible,
+
         ticketTypes,
         trainTypes,
         departStations,
@@ -64,21 +65,23 @@ const App = (props) => {
         arriveTimeStart,
         arriveTimeEnd,
     } = props
+
     const onBack = useCallback(() => {
         window.history.back()
     }, [])
 
+    //UIR解析
     useEffect(() => {
         const queries = URI.parseQuery(window.location.search)
-        const { from, to, date, HighSpeed } = queries
+        const { from, to, date, highSpeed } = queries
         dispatch(setFrom(from))
         dispatch(setTo(to))
         dispatch(setDepartDate(h0(dayjs(date).valueOf())))
-        dispatch(setHighSpeed(HighSpeed === 'true'))
+        dispatch(setHighSpeed(highSpeed === 'true')) //精辟
         dispatch(setSearchParsed(true))
     }, [dispatch])
 
-    //处理多个依赖的副作用
+    //发起异步请求
     useEffect(() => {
         //只有解析完URL才发起请求
         if (!searchParsed) {
@@ -120,7 +123,7 @@ const App = (props) => {
         fetch(url)
             .then((response) => response.json())
             .then((result) => {
-                // console.log(result)
+                //解构深层数据
                 const {
                     dataMap: {
                         directTrainInfo: {
@@ -134,7 +137,6 @@ const App = (props) => {
                         },
                     },
                 } = result
-
                 dispatch(setTrainList(trains))
                 dispatch(setTicketTypes(ticketType))
                 dispatch(setTrainTypes(trainType))
@@ -161,7 +163,7 @@ const App = (props) => {
     ])
 
     //h0是当天的0时刻，h0(departDate)是出发日期的0时刻
-    //isPrevDisabled = 如果出发时刻小于 当天时刻，就不可点
+    //isPrevDisabled = 如果出发时刻小于 当天时刻，是过去的时间，不可点
     //isNextDisabled = 如果出发时刻减去 当天时刻，大于20天的时间
     const isPrevDisabled = h0(departDate) <= h0()
     const isNextDisabled = h0(departDate) - h0() > 20 * 86400 * 1000
@@ -207,7 +209,7 @@ const App = (props) => {
     return (
         <div>
             <div className="header-wrapper">
-                <Header title={`${from} → ${to}`} onBack={() => onBack()} />
+                <Header title={`${from} → ${to}`} onBack={onBack} />
             </div>
             <Nav
                 date={departDate}

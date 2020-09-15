@@ -50,6 +50,7 @@ export function setHighSpeed(highSpeed) {
     }
 }
 
+//异步：切换高铁动车
 export function toggleHighSpeed() {
     return (dispatch, getState) => {
         const { highSpeed } = getState()
@@ -64,7 +65,7 @@ export function setTrainList(trainList) {
     }
 }
 
-//切换早晚
+//异步：切换早晚类型
 export function toggleOrderType() {
     return (dispatch, getState) => {
         const { orderType } = getState()
@@ -82,7 +83,7 @@ export function toggleOrderType() {
     }
 }
 
-//只看有票
+//异步：只看有票
 export function toggleOnlyTickets() {
     return (dispatch, getState) => {
         const { onlyTickets } = getState()
@@ -165,6 +166,8 @@ export function setArriveTimeEnd(arriveTimeEnd) {
         payload: arriveTimeEnd,
     }
 }
+
+//异步：切换浮层是否可见
 export function toggleIsFilterVisible() {
     return (dispatch, getState) => {
         const { isFilterVisible } = getState()
@@ -181,7 +184,7 @@ export function setSearchParsed(searchParsed) {
     }
 }
 
-//获取前一天和后一天
+//切换到前一天和后一天
 export function nextDate() {
     return (dispatch, getState) => {
         const { departDate } = getState()

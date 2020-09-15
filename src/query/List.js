@@ -9,11 +9,14 @@ const ListItem = memo(function ListItem(props) {
         dStation, //出发车站
         aStation, //达到车站
         trainNumber, //车次
-        date, //出发时间
         time, //运行时间
         priceMsg, //价格
         dayAfter, //是否跨越时间
     } = props
+
+    //获取URL的时间参数，因为该项目从服务器获取的时间过时了
+    const queries = URI.parseQuery(window.location.search)
+    const { date } = queries
 
     //设置请求参数
     const url = useMemo(() => {
