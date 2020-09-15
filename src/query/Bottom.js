@@ -4,6 +4,7 @@ import { ORDER_DEPART } from './constant'
 import classnames from 'classnames'
 import Slider from './Slider'
 
+// 每个选项
 const Filter = memo(function Filter(props) {
     const { name, checked, toggle, value } = props
     return (
@@ -16,10 +17,11 @@ const Filter = memo(function Filter(props) {
 const Option = memo(function Option(props) {
     const { title, options, checkedMap, update } = props
 
-    //中间函数
+    //中间函数，因为update无法再往下一级传递了，它更新的是checkedMap数据
     const toggle = useCallback(
         (value) => {
-            //精华，选中还是取消的判断，先复制，再判断
+            //精华，选中还是取消的判断
+            //先复制，再判断，如果在checkedMap就删除，如果不在就添加，最后更新
             const newCheckedMap = { ...checkedMap }
             if (value in checkedMap) {
                 delete newCheckedMap[value]
@@ -116,7 +118,7 @@ const BottomModal = memo(function BottomModal(props) {
     )
     const [localArriveTimeEnd, setLocalArriveTimeEnd] = useState(arriveTimeEnd)
 
-    //渲染内容
+    //不定向选择，没有数据结构渲染？，自己生成！！！
     const optionGroup = [
         {
             title: '坐席类型',
@@ -144,7 +146,7 @@ const BottomModal = memo(function BottomModal(props) {
         },
     ]
 
-    //提交数据到store
+    //点击确定后提交数据到store
     function sure() {
         setCheckedTicketTypes(localCheckedTicketTypes)
         setCheckedTrainTypes(localCheckedTrainTypes)
