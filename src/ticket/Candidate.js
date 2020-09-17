@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { TrainContext } from './context'
 import './Candidate.css'
 
-//选票及跳转
+//选票跳转
 const Channel = memo((props) => {
     const { name, desc, type } = props
 
@@ -44,7 +44,7 @@ const Seat = memo((props) => {
     const {
         type,
         priceMsg,
-        ticketLeft,
+        ticketsLeft,
         channels,
         expanded,
         onToggle,
@@ -59,7 +59,7 @@ const Seat = memo((props) => {
                     {priceMsg}
                 </span>
                 <button className="btn">{expanded ? '收起' : '预定'}</button>
-                <span className="num">{ticketLeft}</span>
+                <span className="num">{ticketsLeft}</span>
             </div>
             <div
                 className="channels"
@@ -78,9 +78,10 @@ const Seat = memo((props) => {
 const Candidate = memo((props) => {
     const { tickets } = props
 
-    //动画效果依赖
+    //动画效果依赖，使用-1是用来关闭抽屉，默认是全部关闭
     const [expandedIndex, setExpandedIndex] = useState(-1)
 
+    //再次点击时，传入的index和expandedIndex是相同的，就设置为 -1 关闭抽屉
     const onToggle = useCallback(
         (index) => {
             setExpandedIndex(index === expandedIndex ? -1 : index)

@@ -13,7 +13,7 @@ const Slider = memo((props) => {
         onEndChanged,
     } = props
 
-    //监听窗口宽度
+    //监听窗口宽度，做兼容性处理
     const winSize = useWinSize()
 
     //操作DOM元素，响应touch事件
@@ -72,7 +72,6 @@ const Slider = memo((props) => {
     const startHours = useMemo(() => {
         return Math.round((startPercent * 24) / 100)
     }, [startPercent])
-    // console.log(startHours)
 
     const EndHours = useMemo(() => {
         return Math.round((EndPercent * 24) / 100)
