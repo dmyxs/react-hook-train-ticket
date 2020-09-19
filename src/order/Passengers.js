@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from 'react'
 import './Passengers.css'
 
+//乘客信息子组件
 const Passenger = memo((props) => {
     const {
         id,
@@ -34,7 +35,10 @@ const Passenger = memo((props) => {
                         className="input name"
                         placeholder="乘客姓名"
                         value={name}
-                        onChange={(e) => onUpdate(id, { name: e.target.value })}
+                        //传iD和对象一起传递
+                        onChange={(e) =>
+                            onUpdate(id, { name: e.target.value.trim() })
+                        }
                     />
                     <label
                         className="ticket-type"
@@ -43,6 +47,7 @@ const Passenger = memo((props) => {
                         {isAdult ? '成人票' : '儿童票'}
                     </label>
                 </li>
+                {/* 成人身份证 */}
                 {isAdult && (
                     <li className="item">
                         <label className="label licenceNo">身份证</label>
@@ -52,11 +57,14 @@ const Passenger = memo((props) => {
                             placeholder="证件号码"
                             value={licenceNumb}
                             onChange={(e) =>
-                                onUpdate(id, { licenceNumb: e.target.value })
+                                onUpdate(id, {
+                                    licenceNumb: e.target.value.trim(),
+                                })
                             }
                         />
                     </li>
                 )}
+                {/* 儿童性别 */}
                 {!isAdult && (
                     <li className="item arrow">
                         <label className="label gender">性别</label>
@@ -76,6 +84,7 @@ const Passenger = memo((props) => {
                         />
                     </li>
                 )}
+                {/* 儿童出生日期 */}
                 {!isAdult && (
                     <li className="item">
                         <label className="label birthday">出生日期</label>
@@ -90,6 +99,7 @@ const Passenger = memo((props) => {
                         />
                     </li>
                 )}
+                {/* 儿童的同行成人 */}
                 {!isAdult && (
                     <li className="item arrow">
                         <label className="label followAdult">同行成人</label>

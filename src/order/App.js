@@ -54,6 +54,7 @@ const App = memo((props) => {
         window.history.back()
     }, [])
 
+    //URL解析
     useEffect(() => {
         const queries = URI.parseQuery(window.location.search)
         const { trainNumber, dStation, aStation, date, type } = queries
@@ -72,6 +73,8 @@ const App = memo((props) => {
         if (!searchParsed) {
             return
         }
+
+        //构造URL
         const url = new URI('/rest/order')
             .setSearch('dStation', departStation)
             .setSearch('aStation', arriveStation)

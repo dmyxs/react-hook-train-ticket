@@ -26,6 +26,13 @@ const Channel = memo((props) => {
             .toString()
     }, [type, trainNumber, departStation, arriveStation, departDate])
 
+    // 字符串拼接
+    // const newSrc = useMemo(() => {
+    //     return `order.html?trainNumber=${trainNumber}&dStation=${departStation}&aStation=${arriveStation}&type=${type}&date=${dayjs(
+    //         departDate
+    //     ).format('YYYY-MM-DD')}`
+    // }, [arriveStation, departDate, departStation, trainNumber, type])
+
     return (
         <div className="channel">
             <div className="middle">

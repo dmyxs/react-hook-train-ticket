@@ -20,7 +20,7 @@ const Slider = memo((props) => {
     const startHandle = useRef()
     const endHandle = useRef()
 
-    //使用ref，可以跨越组件渲染周期保存数据，并且不会触发重渲染,ref可以存储任何数据
+    //使用ref，可以跨越组件渲染周期保存数据，并且不会触发重渲染，ref可以存储任何数据
     //记录上一次滑动
     const lastStartX = useRef()
     const lastEndX = useRef()

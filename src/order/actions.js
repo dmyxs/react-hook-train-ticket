@@ -121,8 +121,8 @@ export function fetchInitial(url) {
     }
 }
 
+//新建成人
 let passengerID = 0
-
 export function createAdult() {
     return (dispatch, getState) => {
         const { passengers } = getState()
@@ -132,30 +132,39 @@ export function createAdult() {
             const keys = Object.keys(passenger)
             for (let key of keys) {
                 if (!passenger[key]) {
+                    alert('请填写乘客信息')
                     return
                 }
+
+                // if (passenger[key] === '') {
+                //     alert('请填写乘客信息')
+                //     return
+                // }
             }
         }
 
         dispatch(
+            //数组中的对象合并：解构旧对象 + 新对象
             setPassengers([
                 ...passengers,
                 {
                     id: ++passengerID,
                     name: '',
                     ticketType: 'adult',
-                    licenceNumb: '',
-                    seat: 'Z',
+                    licenceNumb: '', //身份证
+                    seat: 'Z', //坐席号
                 },
             ])
         )
     }
 }
 
+//新建儿童
 export function createChild() {
     return (dispatch, getState) => {
         const { passengers } = getState()
 
+        //同行成人
         let adultFound = null
 
         for (let passenger of passengers) {
@@ -166,13 +175,15 @@ export function createChild() {
                 }
             }
 
+            //如果有同行成人，设置同行成人
             if (passenger.ticketType === 'adult') {
                 adultFound = passenger.id
             }
         }
 
+        //如果同行没有成人，儿童不允许买票
         if (!adultFound) {
-            alert('请输入成人信息')
+            alert('请至少输入一个成人信息')
             return
         }
 
@@ -182,7 +193,7 @@ export function createChild() {
                 {
                     id: ++passengerID,
                     name: '',
-                    gender: 'none',
+                    gender: 'none', //设置为未知
                     birthday: '',
                     followAdult: adultFound,
                     ticketType: 'child',
@@ -197,15 +208,17 @@ export function createChild() {
 export function removePassenger(id) {
     return (dispatch, getState) => {
         const { passengers } = getState()
+
         //删除：绑定孩子的成人被删除，孩子也要被删除
+        //passengers里可能有大人或者小孩，如果小孩的followAdult = 传递过来的ID，同样要删除
         const newPassengers = passengers.filter(
-            (i) => i.id !== id && id.followAdult !== id
+            (p) => p.id !== id && p.followAdult !== id
         )
         dispatch(setPassengers(newPassengers))
     }
 }
 
-//更新乘客信息
+//更新乘客信息，可以动态更新
 export function updatePassenger(id, data, keysToBeRemoved = []) {
     return (dispatch, getState) => {
         const { passengers } = getState()
@@ -213,20 +226,25 @@ export function updatePassenger(id, data, keysToBeRemoved = []) {
         for (let i = 0; i < passengers.length; ++i) {
             if (passengers[i].id === id) {
                 const newPassengers = [...passengers]
+
+                //复制并创建新的对象
                 newPassengers[i] = Object.assign({}, passengers[i], data)
 
+                //删除多余的属性，在切换成人和儿童票时才使用到
                 for (let key of keysToBeRemoved) {
                     delete newPassengers[i][key]
                 }
 
                 dispatch(setPassengers(newPassengers))
+                //跳出循环
                 break
             }
         }
     }
 }
 
-//显示菜单
+//显示菜单：动态显示
+// TS的重要性：如果不用ts，就不知道menu是什么数据类型，还需往下查找
 export function showMenu(menu) {
     return (dispatch) => {
         dispatch(setMenu(menu))
@@ -244,12 +262,16 @@ export function showGenderMenu(id) {
     return (dispatch, getState) => {
         const { passengers } = getState()
 
+        //第一步：校验数据
         const passenger = passengers.find((passengers) => passengers.id === id)
         if (!passenger) {
             return
         } else {
+            // 派发action中调用其他action
             dispatch(
+                // 生成对象属性
                 showMenu({
+                    // 点击之后数据回填
                     onPress(gender) {
                         dispatch(updatePassenger(id, { gender }))
                         dispatch(hideMenu())
@@ -272,7 +294,7 @@ export function showGenderMenu(id) {
     }
 }
 
-//展示成人信息
+//展示同行成人菜单
 export function showFollowAdultMenu(id) {
     return (dispatch, getState) => {
         const { passengers } = getState()
@@ -287,6 +309,7 @@ export function showFollowAdultMenu(id) {
                     dispatch(updatePassenger(id, { followAdult }))
                     dispatch(hideMenu())
                 },
+                // 获取成人信息（因为可能有多个）并隐射，更该返回信息
                 options: passengers
                     .filter((passenger) => passenger.ticketType === 'adult')
                     .map((adult) => {
@@ -301,6 +324,7 @@ export function showFollowAdultMenu(id) {
     }
 }
 
+//展示同行成人菜单
 export function showTicketTypeMenu(id) {
     return (dispatch, getState) => {
         const { passengers } = getState()
@@ -310,7 +334,9 @@ export function showTicketTypeMenu(id) {
         }
         dispatch(
             showMenu({
+                // 点击切换操作
                 onPress(ticketType) {
+                    // 儿童票切换成 成人票，输入的是adult
                     if ('adult' === ticketType) {
                         dispatch(
                             updatePassenger(
@@ -319,14 +345,17 @@ export function showTicketTypeMenu(id) {
                                     ticketType,
                                     licenceNumb: '',
                                 },
-                                ['gender', 'followAdult', 'birthday']
+                                ['gender', 'followAdult', 'birthday'] //删除字段操作
                             )
                         )
                     } else {
+                        //成人票切换成儿童票
+                        //先查找其他成人，因为没有其他成人，不能切换，儿童必须附带在成人中
                         const adult = passengers.find(
                             (passengers) =>
-                                passengers.id !== id &&
-                                passengers.ticketType === 'adult'
+                                // ticketType 是 成人 并且ID不是自身
+                                passengers.ticketType === 'adult' &&
+                                passengers.id !== id
                         )
                         if (adult) {
                             dispatch(
@@ -338,14 +367,13 @@ export function showTicketTypeMenu(id) {
                                         followAdult: adult.id,
                                         birthday: '',
                                     },
-                                    ['licenceNumb']
+                                    ['licenceNumb'] //删除身份证字段信息
                                 )
                             )
                         } else {
-                            alert('没有其他成人乘客')
+                            alert('请先输入成人信息，再点击添加儿童')
                         }
                     }
-
                     dispatch(hideMenu())
                 },
                 options: [
