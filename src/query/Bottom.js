@@ -4,7 +4,7 @@ import { ORDER_DEPART } from './constant'
 import classnames from 'classnames'
 import Slider from './Slider'
 
-// 每个选项
+// 每个子项
 const Filter = memo(function Filter(props) {
     const { name, checked, toggle, value } = props
     return (
@@ -14,6 +14,7 @@ const Filter = memo(function Filter(props) {
     )
 })
 
+// 浮层选项集合
 const Option = memo(function Option(props) {
     const { title, options, checkedMap, update } = props
 
@@ -52,6 +53,7 @@ const Option = memo(function Option(props) {
     )
 })
 
+// 选择浮层
 const BottomModal = memo(function BottomModal(props) {
     const {
         ticketTypes,
@@ -123,7 +125,7 @@ const BottomModal = memo(function BottomModal(props) {
         {
             title: '坐席类型',
             options: ticketTypes, //数据数组
-            checkedMap: localCheckedTicketTypes, //使用本地版本，是空对象
+            checkedMap: localCheckedTicketTypes, //缓冲区，使用本地版本，是空对象
             update: setLocalCheckedTicketTypes, //更新函数放在该对象中，动态渲染，不用每个都传
         },
         {
@@ -147,7 +149,7 @@ const BottomModal = memo(function BottomModal(props) {
     ]
 
     //点击确定后提交数据到store
-    function sure() {
+    function commitData() {
         setCheckedTicketTypes(localCheckedTicketTypes)
         setCheckedTrainTypes(localCheckedTrainTypes)
         setCheckedDepartStations(localCheckedDepartStations)
@@ -163,9 +165,11 @@ const BottomModal = memo(function BottomModal(props) {
         toggleIsFilterVisible()
     }
 
-    //设置重置按钮是否可点，都为true时不可点，（视觉上）
+    //设置重置按钮是否可点：都是默认值的时候不可点
+    //默认值：每一项都为true时不可点，（视觉上）
     const isResizeDisabled = useMemo(() => {
         return (
+            //对象获取长度：对象为空，默认都是空对象
             Object.keys(localCheckedTicketTypes).length === 0 &&
             Object.keys(localCheckedTrainTypes).length === 0 &&
             Object.keys(localCheckedDepartStations).length === 0 &&
@@ -186,7 +190,7 @@ const BottomModal = memo(function BottomModal(props) {
         localDepartTimeStart,
     ])
 
-    //重置
+    //重置：设置缓存区的数据为初始值
     function reset() {
         //真正不可点
         if (isResizeDisabled) {
@@ -217,7 +221,7 @@ const BottomModal = memo(function BottomModal(props) {
                         >
                             重置
                         </span>
-                        <span className="ok" onClick={sure}>
+                        <span className="ok" onClick={commitData}>
                             确定
                         </span>
                     </div>
@@ -246,6 +250,7 @@ const BottomModal = memo(function BottomModal(props) {
     )
 })
 
+//底部按钮
 const Bottom = memo(function Bottom(props) {
     const {
         highSpeed,
@@ -280,6 +285,8 @@ const Bottom = memo(function Bottom(props) {
         setArriveTimeEnd,
     } = props
 
+    //综合筛选浮层是否有值，如果有值，按钮改变
+    //检测的是store中的数据
     const noChecked = useMemo(() => {
         return (
             Object.keys(checkedTicketTypes).length === 0 &&
